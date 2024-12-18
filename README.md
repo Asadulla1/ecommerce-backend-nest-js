@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Documentation</title>
 </head>
 <body>
+
+  <h1>E-Commerce (Kinbo-naki?) Backend</h1>
   <h1>Project Setup</h1>
 
   <p>To get started with this project, follow the steps below:</p>
