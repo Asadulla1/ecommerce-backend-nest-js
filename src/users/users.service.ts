@@ -1,6 +1,8 @@
-import { userSignInDto } from './dto/user_signIn.dto';
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -8,6 +10,9 @@ import { UserEntity } from './entities/user.entity';
 import { userSignUpDto } from './dto/user_signUp.dto';
 import { hash, compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
+import { Roles } from 'src/utility/common/user_roles_enum';
+import { userSignInDto } from './dto/user_signIn.dto';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -29,7 +34,6 @@ export class UsersService {
     const userExist = await this.findUserByEmail(userSignUpDto.email);
     if (userExist) throw new BadRequestException('Email is not Available');
 
-    // Hash the password of the userSignUp instance
     userSignUpDto.password = await hash(userSignUpDto.password, 5);
 
     let user = this.usersRepository.create(userSignUpDto);
@@ -53,23 +57,49 @@ export class UsersService {
     return userExist;
   }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async findAll(): Promise<UserEntity[]> {
+    return await this.usersRepository.find();
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findOne(user_id: number) {
+    const user = await this.usersRepository.findOneBy({ user_id });
+    if (!user) throw new NotFoundException('user not found');
+    return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async update(
+    user_id: number,
+    updateUserDto: UpdateUserDto,
+    currentUser: UserEntity,
+  ): Promise<UserEntity> {
+    if (user_id !== currentUser.user_id) {
+      throw new BadRequestException('You can only update your own information');
+    }
+
+    const user = await this.usersRepository.findOneBy({ user_id: user_id });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    Object.assign(user, updateUserDto);
+
+    return await this.usersRepository.save(user);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  async remove(user_id: number, currentUser: UserEntity): Promise<string> {
+    if (
+      user_id !== currentUser.user_id &&
+      !currentUser.roles.includes(Roles.ADMIN)
+    ) {
+      throw new BadRequestException('You can only delete your own profile');
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    const user = await this.usersRepository.findOneBy({ user_id: user_id });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.usersRepository.remove(user);
+    return 'User successfully deleted';
   }
 }

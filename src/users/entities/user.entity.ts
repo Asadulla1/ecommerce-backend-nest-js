@@ -1,8 +1,11 @@
+import { CategoryEntity } from 'src/categories/entities/category.entity';
+import { ProductEntity } from 'src/products/entities/product.entity';
 import { Roles } from 'src/utility/common/user_roles_enum';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
   UpdateDateColumn,
@@ -24,4 +27,10 @@ export class UserEntity {
   created_at: Timestamp;
   @UpdateDateColumn()
   updated_at: Timestamp;
+
+  @OneToMany(() => CategoryEntity, (cat) => cat.addedBy)
+  categories: CategoryEntity[];
+
+  @OneToMany(() => ProductEntity, (prod) => prod.addedBy)
+  products: ProductEntity[];
 }
