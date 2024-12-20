@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './utility/middleware/current_user_middleware';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
+import { ReivewsModule } from './reivews/reivews.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ProductsModule } from './products/products.module';
     UsersModule,
     CategoriesModule,
     ProductsModule,
+    ReivewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,6 +4,7 @@ import {
   MaxLength,
   IsPositive,
   IsNumber,
+  IsEmpty,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -37,4 +38,7 @@ export class CreateProductDto {
   @IsString({ message: 'Images must be a string.' })
   @IsNotEmpty({ message: 'Images are required.' })
   images: string;
+  @IsNotEmpty({ message: 'Category Id is required.' })
+  @IsNumber({}, { message: 'Category id should be a number' })
+  categoryId: number;
 }
