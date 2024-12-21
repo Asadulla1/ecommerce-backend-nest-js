@@ -8,6 +8,7 @@ import { LoggerMiddleware } from './utility/middleware/current_user_middleware';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { ReivewsModule } from './reivews/reivews.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ReivewsModule } from './reivews/reivews.module';
     CategoriesModule,
     ProductsModule,
     ReivewsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

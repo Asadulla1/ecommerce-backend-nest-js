@@ -31,9 +31,9 @@ export class CreateProductDto {
   @IsPositive({ message: 'Price should be positive number' })
   price: number;
 
-  @IsString({ message: 'Stock must be a string.' })
+  @IsNumber({}, { message: 'Stock must be a number.' })
   @IsNotEmpty({ message: 'Stock is required.' })
-  stock: string;
+  stock: number;
 
   @IsString({ message: 'Images must be a string.' })
   @IsNotEmpty({ message: 'Images are required.' })

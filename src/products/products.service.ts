@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoriesService } from 'src/categories/categories.service';
 import { UserEntity } from 'src/users/entities/user.entity';
+import { orderStatus } from 'src/orders/enums/order_status.enum';
 
 @Injectable()
 export class ProductsService {
@@ -74,5 +75,17 @@ export class ProductsService {
 
     await this.productRepo.remove(product);
     return `This action removes a #${id} product`;
+  }
+  async updateStock(id: number, stock: number, status: string) {
+    let product = await this.findOne(id);
+
+    if (status === orderStatus.DELIVERED) {
+      product.stock = parseInt(product.stock.toString(), 10) - stock;
+    } else {
+      product.stock = parseInt(product.stock.toString(), 10) + stock;
+    }
+
+    product = await this.productRepo.save(product);
+    return product;
   }
 }
