@@ -83,5 +83,10 @@
   <hr>
 
   <p>Following these steps ensures consistent line endings and resolves any linebreak style issues.</p>
+
+  <h1>Do Add DataBase To Your PG-ADMIN4 Follow below command</h1>
+  <pre><code>npm run migration:generate -- DB/migrations/addTBL_orders_3_table_updated</code></pre>
+  <p>After that write this code</p>
+   <pre><code>npm run migration:run </code></pre>
 </body>
 </html>
